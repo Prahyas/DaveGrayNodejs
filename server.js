@@ -1,17 +1,11 @@
 const express = require("express");
-const fs = require("fs");
-
+const checkAuth = require("./checkAuth");
 const app = express();
 
-app.get("/", (req, res) => {
-  let serverData = "";
-  fs.readFile("./data.txt", "utf8", (err, data) => {
-    if (err) throw err;
-    serverData = data;
-    res.send(serverData);
-  });
+app.use(checkAuth);
+
+app.get("/admin", checkAuth, (req, res) => {
+  res.send("Authenticated");
 });
 
-app.listen(5000, () => {
-  console.log("Server started");
-});
+app.listen(5000);
